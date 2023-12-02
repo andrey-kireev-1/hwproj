@@ -4,7 +4,7 @@ on:
       - main
       - 02_DESKTOP_SEARCH
 
-name: "Trigger: Push action"
+name: "ShellCheck"
 permissions: {}
 
 jobs:
