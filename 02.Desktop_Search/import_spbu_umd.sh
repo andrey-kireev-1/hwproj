@@ -1,12 +1,10 @@
 #!/bin/bash
 
 dl_spbu_s_e () {
-    echo "$1"
     curl "$1" -s --compressed -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' -H 'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3' -H 'Accept-Encoding: gzip, deflate, br' -H 'DNT: 1' -H 'Connection: keep-alive'
 }
 
 dl_spbu_oop () {
-    echo "$1"
     dl_spbu_s_e "$1" | grep -o -E "'https://nc\.spbu\.ru/.+?'" | sed "s/'//g" | sort | uniq | sort -R | head -n 10 | sort -R | head -n 3
 }
 
