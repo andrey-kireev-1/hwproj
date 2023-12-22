@@ -5,7 +5,12 @@ dl_spbu_s_e () {
 }
 
 dl_spbu_oop () {
-    dl_spbu_s_e "$1" | grep -o -E "'https://nc\.spbu\.ru/.+?'" | sed "s/'//g" | sort | uniq | sort -R | head -n 10 | sort -R | head -n 3
+    if [[ "$2" == true ]];
+    then
+        dl_spbu_s_e "$1" | grep -o -E "'https://nc\.spbu\.ru/.+?'" | sed "s/'//g" | sort | uniq | sort -R | head -n 10
+    else
+        dl_spbu_s_e "$1" | grep -o -E "'https://nc\.spbu\.ru/.+?'" | sed "s/'//g" | sort | uniq
+    fi
 }
 
 usage() {
@@ -31,17 +36,24 @@ for arg in "$@"; do
     esac
 done
 
-while getopts ":s:d:p:" arg
+for arg in "$@"; do
+    echo "$arg"
+done
+
+while getopts ":s:d:p" arg
 do
     case "$arg" in
         's') SOURCE=${OPTARG} ;;
         'd') DESTINATION=${OPTARG} ;;
-        'p') PROBE=${OPTARG} ;;
+        'p') PROBE=true;;
         ':') usage ;;
         '*') usage ;;
     esac
 done
-shift $((OPTIND-1))
+
+echo "SOURCE = $SOURCE"
+echo "DESTINATION = $DESTINATION"
+echo "PROBE = $PROBE"
 
 if [ -z "$SOURCE"  ] ; then
     echo "Source info should be filled!"
@@ -57,10 +69,6 @@ if [ -n "$DESTINATION" ]; then
     mkdir -p "$DESTINATION"
 fi
 
-echo "SOURCE = $SOURCE"
-echo "DESTINATION = $DESTINATION"
-echo "PROBE = $PROBE"
-
 function download {
     if ! wget -O "$2" "$1/download"; then
        >&2 echo "Cannot download $1"
@@ -68,7 +76,7 @@ function download {
     fi
 }
 
-LOAD="$(dl_spbu_oop "$SOURCE")"
+LOAD="$(dl_spbu_oop "$SOURCE" "$PROBE")"
 
 echo "LOAD = $LOAD"
 
@@ -92,4 +100,12 @@ function unpack {
     done
 }
 
+recoll_index () {
+    mkdir -p .recoll
+    echo "topdirs = $(realpath "$DESTINATION")" > ./.recoll/recoll.conf
+    echo "start recollindex"
+    recollindex -c ./.recoll
+}
+
 unpack
+recoll_index
