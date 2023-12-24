@@ -1,0 +1,24 @@
+name: CMake
+
+on:
+  push:
+    branches: [ main, 03_A_FRACTAL ]
+  pull_request:
+    branches: [ main, 03_A_FRACTAL ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure CMake
+        run: cmake -S ${{github.workspace}}/03.Fractal -B ${{github.workspace}}/03.Fractal/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/03.Fractal/build --config ${{env.BUILD_TYPE}}
