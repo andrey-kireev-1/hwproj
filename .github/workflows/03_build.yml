@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ 03.Fractal ]
+    branches: [ main, 03.Fractal ]
   pull_request:
-    branches: [ 03.Fractal ]
+    branches: [ main, 03.Fractal ]
   workflow_dispatch:
 
 env:
