@@ -1,3 +1,5 @@
+[![CMake](https://github.com/andrey-kireev-1/hwproj/actions/workflows/03_build.yml/badge.svg?branch=03.Fractal)](https://github.com/andrey-kireev-1/hwproj/actions/workflows/03_build.yml)
+
 # Fractal
 
 ## Overview
